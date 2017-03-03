@@ -1,0 +1,382 @@
+
+
+/****************************************
+              Zerus97
+*****************************************/
+
+#include <bits/stdc++.h>
+
+
+#define loop(i,s,e) for(int i = s;i<=e;i++) //including end point
+
+#define pb(a) push_back(a)
+
+#define sqr(x) ((x)*(x))
+
+#define CIN ios_base::sync_with_stdio(0); cin.tie(0);
+
+#define ll long long
+
+#define ull unsigned long long
+
+#define SZ(a) int(a.size())
+
+#define read() freopen("input.txt", "r", stdin)
+
+#define write() freopen("output.txt", "w", stdout)
+
+
+#define ms(a,b) memset(a, b, sizeof(a))
+
+#define all(v) v.begin(), v.end()
+
+#define PI acos(-1.0)
+
+#define pf printf
+
+#define sfi(a) scanf("%d",&a);
+
+#define sfii(a,b) scanf("%d %d",&a,&b);
+
+#define sfl(a) scanf("%lld",&a);
+
+#define sfll(a,b) scanf("%lld %lld",&a,&b);
+
+#define sful(a) scanf("%llu",&a);
+
+#define sfulul(a,b) scanf("%llu %llu",&a,&b);
+
+#define sful2(a,b) scanf("%llu %llu",&a,&b); // A little different
+
+#define sfc(a) scanf("%c",&a);
+
+#define sfs(a) scanf("%s",a);
+
+#define getl(s) getline(cin,s);
+
+#define mp make_pair
+
+#define paii pair<int, int>
+
+#define padd pair<dd, dd>
+
+#define pall pair<ll, ll>
+
+#define vi vector<int>
+
+#define vll vector<ll>
+
+#define mii map<int,int>
+
+#define mlli map<ll,int>
+
+#define mib map<int,bool>
+
+#define fs first
+
+#define sc second
+
+#define CASE(t) printf("Case %d:\n",++t) // t initialized 0
+
+#define cCASE(t) cout<<"Case "<<++t<<": ";
+
+#define D(v,status) cout<<status<<" "<<v<<endl;
+
+#define INF 1000000000   //10e9
+
+#define EPS 1e-9
+
+#define flc fflush(stdout); //For interactive programs , flush while using pf (that's why __c )
+
+
+
+#define CONTEST 1
+
+using namespace std;
+
+//CONTEST MATRIX LIB
+
+#define GB 0
+
+#define dim 6
+
+#define mat vector<vector<ll> >
+
+
+ll matmod;
+
+mat GBv;
+ll a1,b1,c1,a2,b2,c2;
+ll f0,f1,f2,g0,g1,g2;
+ll idmat[] = //Each row
+{
+    a1 , b1 , 0 , 0 , 0 , c1 ,
+    1 , 0 , 0 , 0 , 0 , 0 ,
+    0 , 1 , 0 , 0 , 0 , 0 ,
+    0 , 0 , c2 , a2 , b2 , 0 ,
+    0 , 0 , 0 , 1 , 0 , 0 ,
+    0 , 0 , 0 , 0 , 1 , 0 ,
+
+};
+ll base[] =
+{
+    f2,
+    f1,
+    f0,
+    g2,
+    g1,
+    g0
+
+};
+mat assImat(ll arr[],int row,int col) // assign identity matrix
+{
+    mat X;
+
+
+
+    int arridx = 0;
+
+    vll rows;
+
+
+
+    if(!rows.empty())
+    {
+        rows.clear();
+    }
+
+    loop(r,0,row-1)
+    {
+
+        loop(c,0,col-1)
+        {
+            rows.pb(arr[arridx]);
+
+            arridx++;
+        }
+        X.pb(rows);
+        rows.clear();
+
+
+    }
+
+    return X;
+
+}
+
+mat applymod(mat A,int row,int col)
+{
+
+    loop(r,0,row-1)
+    {
+        loop(c,0,col-1)
+        A[r][c]%=matmod;
+    }
+    return A;
+}
+
+mat matmul(mat A,mat B,int ra,int ca,int rb,int cb)
+{
+    if(ca!=rb)
+    {
+        cout<<"ERR dim"<<endl;
+        return GBv;
+    }
+
+    mat res;
+
+    vll rows;
+
+    loop(amr,0,ra-1) //ans matrix row
+    {
+        loop(amc,0,rb-1)
+        {
+            ll rowi = 0;
+            loop(crc,0,ca-1) //common row column
+            {
+
+                rowi= ((rowi%matmod) +
+                       (A[amr][crc]%matmod)*
+                       (B[crc][amc]%matmod))%matmod;
+
+
+
+
+
+
+            }
+
+            rows.pb(rowi);
+
+        }
+
+        res.pb(rows);
+        rows.clear();
+
+
+    }
+
+    return res;
+
+
+}
+mat expo(mat A, int row,int col,ll p)
+{
+    if(p==1)
+    {
+        mat Ap = applymod(A,row,col);
+        return Ap;
+    }
+
+    else if(p%2==0)
+    {
+        mat halfp = expo(A,row,col,p/2);
+        mat halfp2 = applymod(halfp,
+                              row,col);
+        mat res = matmul(halfp2,halfp2,
+                         row,col,row,col);
+        return res;
+    }
+    else if(p%2==1)
+    {
+        mat halfp = expo(A,row,col,p/2);
+        mat halfp2 = applymod(halfp,
+                              row,col);
+        mat resp = matmul(halfp2,halfp2,
+                          row,col,row,col);
+        mat resp2 = applymod(resp,row,col);
+        mat finres = matmul(resp2,A,
+                            row,col,row,col);
+        return finres;
+    }
+
+
+
+}
+void showmat(mat A,int row,int col)
+{
+    loop(r,0,row-1)
+    {
+        loop(c,0,col-1)
+        cout<<A[r][c]<<" ";
+        cout<<endl;
+    }
+}
+pair<ll,ll> funfg(ll n)
+{
+    if(n==0)
+        return mp(f0,g0);
+    if(n==1)
+        return mp(f1,g1);
+    if(n==2)
+        return mp(f2,g2);
+
+    mat Id = assImat(idmat,6,6);
+
+    Id[0][0] = a1;
+    Id[0][1] = b1;
+    Id[0][5] = c1;
+
+    Id[3][2] = c2;
+    Id[3][3] = a2;
+    Id[3][4] = b2;
+
+
+
+
+
+
+
+    //showmat(Id,dim,dim);
+
+    mat basemat = assImat(base,6,1);
+
+    basemat[0][0] = f2;
+    basemat[1][0] = f1;
+    basemat[2][0] = f0;
+    basemat[3][0] = g2;
+    basemat[4][0] = g1;
+    basemat[5][0] = g0;
+
+    //showmat(basemat,6,1);
+
+    mat expmat = expo(Id,dim,dim,n-2);
+
+    //showmat(expmat,dim,dim);
+
+    mat expmat2 = applymod(expmat,
+                           dim,dim);
+
+    mat ans = matmul(expmat2,basemat,dim,
+                     dim,dim,1);
+
+    //showmat(ans,dim,1);
+    ll ansfn_p1 = ans[0][0]%matmod;
+
+    ll ansgn_p1 = ans[3][0]%matmod;
+
+    pair<ll,ll>temp;
+    temp.fs = ansfn_p1;
+    temp.sc = ansgn_p1;
+
+
+    return temp;
+
+}
+int main()
+{
+
+
+    //write();
+
+
+    int tc,cas  = 0;
+
+    sfi(tc);
+    while(tc--)
+    {
+        sfll(a1,b1);
+        sfl(c1);
+
+        sfll(a2,b2);
+        sfl(c2);
+
+        sfll(f0,f1);
+        sfl(f2);
+
+        sfll(g0,g1);
+        sfl(g2);
+
+        sfl(matmod);
+
+        CASE(cas);
+
+        int q;
+        sfi(q);
+
+
+        while(q--)
+        {
+
+            ll n;
+            sfl(n);
+
+            ll ans1 = funfg(n).fs;
+            ll ans2 = funfg(n).sc;
+
+
+            pf("%lld %lld\n",ans1%matmod,ans2%matmod);
+
+
+        }
+
+
+
+    }
+
+
+
+
+
+    return 0;
+}

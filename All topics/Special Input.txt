@@ -1,0 +1,8 @@
+Taking integer input from a single line string
+
+        char buff[100000];
+        gets(buff);
+        stringstream ss(buff);
+        int i = 1;
+        while(ss>>Arr[i++]); // The string is copied to Arr
+        N = i-2;

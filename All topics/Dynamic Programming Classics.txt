@@ -1,0 +1,119 @@
+N_C_R
+
+nCr(n,r) =nCr(n-1,r) + nCr(n-1,r-1)
+
+#define i64 long long
+i64 nCr(int n,int r)
+{
+   if(r==1) return n;
+   if(n==r) return 1;
+   return nCr(n-1,r)+nCr(n-1,r-1);
+
+}
+
+
+//Bottom up
+ 
+    // Caculate value of Binomial Coefficient in bottom up manner
+    for (int i = 0; i <= n; i++)
+    {
+        for (int j = 0; j <= min(i, r); j++) // nCr(n,r) only need to go j = 0 to r //if(r<i) handle that
+        {
+            // Base Cases
+            if (j == 0 || j == i)
+                C[i][j] = 1;
+ 
+            // Calculate value using previosly stored values
+            else
+                C[i][j] = C[i-1][j-1] + C[i-1][j];
+        }
+    }
+ 
+
+//Memory efficient
+
+    // initialize by the first row
+    row[0] = 1; // this is the value of C(0, 0)
+
+    for(int i = 1; i <= n; i++) {
+        for(int j = i; j > 0; j--) {
+             // from the recurrence C(n, r) = C(n - 1, r - 1) + C(n - 1, r)
+             row[j] += row[j - 1];
+        }
+    }
+
+//Another
+
+long long combi(int n,int k)
+{
+    long long ans=1;
+    k=k>n-k?n-k:k;
+    int j=1;
+    for(;j<=k;j++,n--)
+    {
+        if(n%j==0)
+        {
+            ans*=n/j;
+        }else
+        if(ans%j==0)
+        {
+            ans=ans/j*n;
+        }else
+        {
+            ans=(ans*n)/j;
+        }
+    }
+    return ans;
+}
+
+
+
+0_1_Knapsack
+
+
+int CAP;
+int rec(int i,int w)
+{
+	if(i==n+1) return 0; //Every object has been assumed
+	if(dp[i][w]!=-1) return dp[i][w]; //previosuly calculated state
+	int profit1=0,profit2=0;
+	if(w+weight[i]<=CAP) 
+		profit1=cost[i]+rec(i+1,w+weight[i]);//If I take ith object
+	
+	profit2=rec(i+1,w); //If I dont take ith object
+	dp[i][w]=max(profit1,profit2); //Will take the maximum
+	return dp[i][w];
+}
+
+
+for (i = 0; i <= n; i++)
+   {
+       for (w = 0; w <= W; w++)
+       {
+           if (i==0 || w==0)
+               K[i][w] = 0;
+           else if (wt[i-1] <= w)
+                 K[i][w] = max(val[i-1] + K[i-1][w-wt[i-1]],  K[i-1][w]);
+           else
+                 K[i][w] = K[i-1][w];
+       }
+   }
+
+
+
+int dir[][]={{-1}};
+int dp[][]={{-1}};
+int func(int i,int w) 
+{
+    .........
+    //BASE CASE
+    .........
+
+     if(w+weight[i]<=CAP) 
+         profit1=cost[i]+func(i+1,w+weight[i])
+     else
+         profit1=0;
+     profit2=func(i+1,w) 
+     if(profit1>profit2){dir[i][w]=1; return dp[i][w]=profit1;}
+     else {dir[i][w]=2; return dp[i][w]=profit2;}
+}

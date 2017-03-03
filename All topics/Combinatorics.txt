@@ -1,0 +1,10 @@
+Bars and stars
+1) Sum of k tuples adding upto N (all positive)
+N-1 C K-1
+
+2) Sum of k tuples adding upto N (all non-negative)
+N+K-1 C N or N+K-1 C K-1
+
+3)Dearrangement Formula :
+d(1) = 0 d(2) = 0;
+d(n) = (n-1)*( d(n-1) + d(n-2))

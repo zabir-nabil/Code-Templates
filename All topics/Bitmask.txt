@@ -1,0 +1,40 @@
+
+//Bit Manipulation
+bool Check_ON(int mask,int pos) //Check if pos th bit (from right) of mask is ON
+{
+    if( (mask & (1<<pos) ) == 0  )return false;
+    return true;
+}
+int SET(int mask,int pos) //Save the returned mask into some var //Turn on pos th bit in mask
+{
+    return (mask | (1<<pos));
+}
+int RESET(int mask,int pos)  //Save the returned mask into some var //Turn off pos th bit in mask
+{
+    return (mask & ~(1<<pos));
+}
+int FLIP(int mask,int pos) //Save the returned mask into some var //Toggle/Flip pos th bit in mask
+{
+    return (mask ^ (1<<pos));
+}
+int LSB(int mask) // The actual LSB mask
+{
+    return (mask & (-mask));
+}
+int LSB_pos(int mask) // 0 based position
+{
+    int mask_2 = (mask & (-mask));
+    for(int pos = 0;pos<=15;pos++)
+    {
+        if(Check_ON(mask_2,pos))
+            return pos;
+    }
+    return -1;//
+}
+int ON_Bits(int mask)
+{
+    return __builtin_popcount(mask);
+}
+inline int clz(int N) { // O(1) way to calculate log2(X) (int s only)
+    return N ? 32 - __builtin_clz(N) : -INF;
+}

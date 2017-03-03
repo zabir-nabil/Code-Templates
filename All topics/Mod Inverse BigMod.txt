@@ -1,0 +1,58 @@
+// To compute x^y under modulo m
+ll power(ll base,ll pw,ll mod)
+{
+    if (pw == 0)
+        return 1;
+    ll p12 = power(base, pw/2, mod) % mod;
+    p12 = (p12 * p12) % mod;
+    if(pw%2==0)
+       return p12;
+    else
+       return ((base%mod)*(p12))%mod;
+}
+ll modInverse(ll a, ll m)
+{
+    
+      return power(a, m-2, m);
+    
+}
+ 
+
+
+
+
+//Using Extended Euclid
+
+
+ll gcdExtended(ll a, ll b, ll *x, ll *y)
+{
+    // Base Case
+    if (a == 0)
+    {
+        *x = 0, *y = 1;
+        return b;
+    }
+ 
+    ll x1, y1; // To store results of recursive call
+    ll gcd = gcdExtended(b%a, a, &x1, &y1);
+ 
+    // Update x and y using results of recursive
+    // call
+    *x = y1 - (b/a) * x1;
+    *y = x1;
+ 
+    return gcd;
+}
+
+ll modinv(ll a, ll m)
+{
+    ll x, y;
+    ll g = gcdExtended(a, m, &x, &y);
+    
+    // m is added to handle negative x
+    ll res = (x%m + m) % m;
+    return res;
+    
+}
+ 
+

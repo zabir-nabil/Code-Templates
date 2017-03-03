@@ -1,0 +1,79 @@
+package root;
+
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+//import java.math.BigInteger;
+import java.util.StringTokenizer;
+
+public class NS_1_69A {
+	 public static void main(String[] args) {
+	      fastScanner fs = new fastScanner();
+	      out = new PrintWriter(new BufferedOutputStream(System.out));
+	      
+	      
+	      
+	      
+	      
+	      
+	      
+	      
+	      
+	      
+	  	      out.close();
+	   }
+
+	     
+
+	   public static PrintWriter out;
+	      
+	   public static class fastScanner {
+	      BufferedReader BuffRead;
+	      StringTokenizer StrToc;
+	 
+	      public fastScanner() {
+	         BuffRead = new BufferedReader(new InputStreamReader(System.in));
+	      }
+	 
+	      String next() {
+	          while (StrToc == null || !StrToc.hasMoreElements()) {
+	              try {
+	                  StrToc = new StringTokenizer(BuffRead.readLine());
+	              } catch (IOException e) {
+	                  e.printStackTrace();
+	              }
+	          }
+	          return StrToc.nextToken();
+	      }
+	 
+	      int nextInt() {
+	          return Integer.parseInt(next());
+	      }
+	 
+	      long nextLong() {
+	          return Long.parseLong(next());
+	      }
+	 
+	      double nextDouble() {
+	          return Double.parseDouble(next());
+	      }
+	      /*
+	      BigInteger nextBigInteger(){
+	    	  return new BigInteger(next().toString());
+	      }
+	      */
+	      String nextLine(){
+	          String str = "";
+		  try {
+		     str = BuffRead.readLine();
+		  } catch (IOException e) {
+		     e.printStackTrace();
+		  }
+		  return str;
+	      }
+
+	   }
+
+}

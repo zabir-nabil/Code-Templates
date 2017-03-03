@@ -1,0 +1,358 @@
+
+
+/****************************************
+              Zerus97
+*****************************************/
+
+#include <bits/stdc++.h>
+
+
+#define loop(i,s,e) for(int i = s;i<=e;i++) //including end point
+
+#define pb(a) push_back(a)
+
+#define sqr(x) ((x)*(x))
+
+#define CIN ios_base::sync_with_stdio(0); cin.tie(0);
+
+#define ll long long
+
+#define ull unsigned long long
+
+#define SZ(a) int(a.size())
+
+#define read() freopen("input.txt", "r", stdin)
+
+#define write() freopen("output.txt", "w", stdout)
+
+
+#define ms(a,b) memset(a, b, sizeof(a))
+
+#define all(v) v.begin(), v.end()
+
+#define PI acos(-1.0)
+
+#define pf printf
+
+#define sfi(a) scanf("%d",&a);
+
+#define sfii(a,b) scanf("%d %d",&a,&b);
+
+#define sfl(a) scanf("%lld",&a);
+
+#define sfll(a,b) scanf("%lld %lld",&a,&b);
+
+#define sful(a) scanf("%llu",&a);
+
+#define sfulul(a,b) scanf("%llu %llu",&a,&b);
+
+#define sful2(a,b) scanf("%llu %llu",&a,&b); // A little different
+
+#define sfc(a) scanf("%c",&a);
+
+#define sfs(a) scanf("%s",a);
+
+#define getl(s) getline(cin,s);
+
+#define mp make_pair
+
+#define paii pair<int, int>
+
+#define padd pair<dd, dd>
+
+#define pall pair<ll, ll>
+
+#define vi vector<int>
+
+#define vll vector<ll>
+
+#define mii map<int,int>
+
+#define mlli map<ll,int>
+
+#define mib map<int,bool>
+
+#define fs first
+
+#define sc second
+
+#define CASE(t) printf("Case %d: ",++t) // t initialized 0
+
+#define cCASE(t) cout<<"Case "<<++t<<": ";
+
+#define D(v,status) cout<<status<<" "<<v<<endl;
+
+#define INF 1000000000   //10e9
+
+#define EPS 1e-9
+
+#define flc fflush(stdout); //For interactive programs , flush while using pf (that's why __c )
+
+
+
+#define CONTEST 1
+
+using namespace std;
+
+//CONTEST MATRIX LIB
+
+#define GB 0
+
+#define dim 2
+
+#define mat vector<vector<ll> >
+
+#define matmod  10000
+
+mat GBv;
+ll a,b;
+ll idmat[] = //Each row
+{
+    1,1,
+    1,0
+
+};
+ll base[] =
+{
+    0,
+    0,
+
+};
+mat assImat(ll arr[],int row,int col) // assign identity matrix
+{
+    mat X;
+
+
+
+    int arridx = 0;
+
+    vll rows;
+
+
+
+    if(!rows.empty())
+    {
+        rows.clear();
+    }
+
+    loop(r,0,row-1)
+    {
+
+        loop(c,0,col-1)
+        {
+            rows.pb(arr[arridx]);
+
+            arridx++;
+        }
+        X.pb(rows);
+        rows.clear();
+
+
+    }
+
+    return X;
+
+}
+
+mat applymod(mat A,int row,int col)
+{
+
+    loop(r,0,row-1)
+    {
+        loop(c,0,col-1)
+        A[r][c]%=matmod;
+    }
+    return A;
+}
+
+mat matmul(mat A,mat B,int ra,int ca,int rb,int cb)
+{
+    if(ca!=rb)
+    {
+        cout<<"ERR dim"<<endl;
+        return GBv;
+    }
+
+    mat res;
+
+    vll rows;
+
+    loop(amr,0,ra-1) //ans matrix row
+    {
+        loop(amc,0,rb-1)
+        {
+            ll rowi = 0;
+            loop(crc,0,ca-1) //common row column
+            {
+
+                rowi= ((rowi%matmod) +
+                (A[amr][crc]%matmod)*
+                       (B[crc][amc]%matmod))%matmod;
+
+
+
+
+
+
+            }
+
+            rows.pb(rowi);
+
+        }
+
+        res.pb(rows);
+        rows.clear();
+
+
+    }
+
+    return res;
+
+
+}
+mat expo(mat A, int row,int col,ll p)
+{
+    if(p==1){
+        mat Ap = applymod(A,row,col);
+        return Ap;
+    }
+
+    else if(p%2==0)
+    {
+        mat halfp = expo(A,row,col,p/2);
+        mat halfp2 = applymod(halfp,
+                              row,col);
+        mat res = matmul(halfp2,halfp2,
+                         row,col,row,col);
+        return res;
+    }
+    else if(p%2==1)
+    {
+        mat halfp = expo(A,row,col,p/2);
+        mat halfp2 = applymod(halfp,
+                              row,col);
+        mat resp = matmul(halfp2,halfp2,
+                          row,col,row,col);
+        mat resp2 = applymod(resp,row,col);
+        mat finres = matmul(resp2,A,
+                            row,col,row,col);
+        return finres;
+    }
+
+
+
+}
+void showmat(mat A,int row,int col)
+{
+    loop(r,0,row-1)
+    {
+        loop(c,0,col-1)
+        cout<<A[r][c]<<" ";
+        cout<<endl;
+    }
+}
+ll fun(ll a,ll b,ll n)
+{
+    if(n==0)
+        return a;
+    if(n==1)
+        return b;
+
+    mat Id = assImat(idmat,2,2);
+
+
+
+
+    //showmat(Id,dim,dim);
+
+    mat basemat = assImat(base,2,1);
+
+    basemat[0][0] = b;
+    basemat[1][0] = a;
+
+    //showmat(basemat,2,1);
+
+    mat expmat = expo(Id,dim,dim,n-1);
+
+    //showmat(expmat,dim,dim);
+
+    mat expmat2 = applymod(expmat,
+                           dim,dim);
+
+    mat ans = matmul(expmat2,basemat,dim,
+                     dim,dim,1);
+
+    //showmat(ans,dim,1);
+    ll ansfn_p1 = ans[0][0];
+
+    return (ansfn_p1%matmod);
+
+}
+int main()
+{
+    //3 8 521134789 3
+
+    //write();
+
+
+    int tc,cas  = 0;
+
+    sfi(tc);
+    while(tc--)
+    {
+       ll n;
+       int m;
+       sfll(a,b);
+       sfl(n);
+       sfi(m);
+       ll ans = fun(a,b,n);
+
+       if(ans==0)
+       {
+           CASE(cas);
+           pf("0\n");
+           continue;
+       }
+       deque<int> dig;
+
+       while(m>0 && ans>0)
+       {
+           dig.pb(ans%10);
+           ans/=10;
+           m--;
+       }
+
+       int str = SZ(dig)-1;
+
+       //loop(xx,0,SZ(dig)-1)
+       //cout<<dig[xx]<<" ";
+       //cout<<endl;
+
+
+       while(dig[str]==0 && str>0)
+       {
+           //dig.pop_back();
+           str--;
+       }
+
+
+
+       CASE(cas);
+
+       for(int i = str;i>=0;i--)
+       {
+           pf("%d",dig[i]);
+       }
+
+       pf("\n");
+       if(!dig.empty())
+       dig.clear();
+
+    }
+
+
+
+
+
+    return 0;
+}
