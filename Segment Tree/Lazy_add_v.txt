@@ -1,0 +1,67 @@
+//Add value v to a range
+//Get sum for a range
+struct node
+{
+    ll sum,prop;
+    node()
+    {
+        sum = 0;
+        prop = 0;
+    }
+};
+node tree[4*100005];
+void update(int root,int b,int e,int i,int j,ll v)
+{
+    if(b>j || e<i)
+    {
+        return;
+    }
+    if(b==e)
+    {
+       tree[root].sum+=v;
+       return;
+    }
+
+    if(b>=i && e<=j)
+    {
+        tree[root].prop += v;
+        ll addedsum = (e-b+1)*v;
+        tree[root].sum += addedsum;
+        return;
+    }
+
+    int mid = (b+e)/2;
+    int lc = root*2;
+    int rc = lc+1;
+
+    update(lc,b,mid,i,j,v);
+    update(rc,mid+1,e,i,j,v);
+
+    tree[root].sum = tree[lc].sum
+                     + tree[rc].sum
+                     + (e-b+1)*tree[root].prop;
+
+}
+ll query(int root,int b,int e,int i,int j,ll qp)
+{
+    if(b>j || e<i)
+    {
+        return 0;
+    }
+
+    if(b>=i && e<=j)
+    {
+        ll actual_sum = tree[root].sum;
+        ll prop_sum = (e-b+1)*qp;
+        return actual_sum + prop_sum;
+    }
+
+    int mid = (b+e)/2;
+    int lc = root*2;
+    int rc = lc+1;
+
+    ll p1 = query(lc,b,mid,i,j,qp+tree[root].prop);
+    ll p2 = query(rc,mid+1,e,i,j,qp+tree[root].prop);
+
+    return p1 + p2;
+}
